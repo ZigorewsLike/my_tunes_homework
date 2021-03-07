@@ -86,11 +86,13 @@
         android:layout_marginBottom="5dp"
         android:orientation="horizontal">
         <Button
+            android:id="@+id/saveOrAdd"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:text="Добавить новый трек"/>
+            android:text="Добавить новый трек"
+            android:onClick="onClickAddTrack"/>
         <Button
             android:layout_width="0dp"
             android:layout_marginStart="5dp"
@@ -101,6 +103,7 @@
 
     <ListView
         android:id="@+id/listTracks"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

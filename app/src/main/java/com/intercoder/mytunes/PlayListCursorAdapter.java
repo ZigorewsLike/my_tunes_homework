@@ -32,9 +32,8 @@ public class PlayListCursorAdapter extends CursorAdapter {
                 R.drawable.playlist4, R.drawable.playlist5, R.drawable.playlist6};
         String title = cursor.getString(cursor.getColumnIndexOrThrow("name"));
         int index = cursor.getInt(cursor.getColumnIndexOrThrow("image_id"));
+        long id_plst = cursor.getLong(cursor.getColumnIndex("_id"));
         tvBody.setText(title);
-        Log.i("Height_cell", String.valueOf(tvBody.getHeight()));
-        Log.i("Height_cell_line", String.valueOf(tvBody.getLineHeight()));
         icon.setImageResource(icons[index]);
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +43,7 @@ public class PlayListCursorAdapter extends CursorAdapter {
                 intent.putExtra("mode", "watch");
                 intent.putExtra("image_ind", index);
                 intent.putExtra("pl_name", title);
+                intent.putExtra("id_playlist", id_plst);
                 context.startActivity(intent);
             }
         });

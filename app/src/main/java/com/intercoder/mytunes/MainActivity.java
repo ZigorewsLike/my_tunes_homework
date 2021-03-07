@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     GridView gridView;
     SQLiteDatabase database;
+    PlayListCursorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         database = helper.getWritableDatabase();
         Cursor c = database.rawQuery("SELECT * FROM playlists", null);
 
-        PlayListCursorAdapter adapter = new PlayListCursorAdapter(this, c);
+        adapter = new PlayListCursorAdapter(this, c);
         gridView.setAdapter(adapter);
 
     }
@@ -33,5 +34,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, PlaylistActivity.class);
         intent.putExtra("mode", "add");
         startActivity(intent);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Cursor c = database.rawQuery("SELECT * FROM playlists", null);
+        adapter = new PlayListCursorAdapter(this, c);
+        gridView.setAdapter(adapter);
     }
 }
