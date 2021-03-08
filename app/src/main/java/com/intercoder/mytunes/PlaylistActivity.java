@@ -28,9 +28,11 @@ public class PlaylistActivity extends AppCompatActivity {
     TextView playListName;
     EditText playListEditName;
     ListView listView;
-    Button saveOrAdd;
+    Button saveOrAdd, cancelOrDelete;
     SQLiteDatabase database;
     int icon_index;
+    int[] icons = {R.drawable.playlist1, R.drawable.playlist2, R.drawable.playlist3,
+            R.drawable.playlist4, R.drawable.playlist5, R.drawable.playlist6};
     long idPlaylist;
 
     @Override
@@ -43,6 +45,7 @@ public class PlaylistActivity extends AppCompatActivity {
         playListEditName = findViewById(R.id.editTextName);
         listView = findViewById(R.id.listTracks);
         saveOrAdd = findViewById(R.id.saveOrAdd);
+        cancelOrDelete = findViewById(R.id.cancelOrDelete);
 
         idPlaylist = getIntent().getLongExtra("id_playlist", -1);
         DBHelperWithLoader helper = new DBHelperWithLoader(this);
@@ -50,25 +53,25 @@ public class PlaylistActivity extends AppCompatActivity {
         Log.i("id playlist", String.valueOf(idPlaylist));
         updateMusicTracks();
 
-        int[] icons = {R.drawable.playlist1, R.drawable.playlist2, R.drawable.playlist3,
-                R.drawable.playlist4, R.drawable.playlist5, R.drawable.playlist6};
         mode = getIntent().getStringExtra("mode");
         icon_index = getIntent().getIntExtra("image_ind", 0);
         Random r = new Random();
-        switch (mode){
-            case "add":
-                icon_index = r.nextInt(6);
-                playListEditName.setVisibility(View.VISIBLE);
-                saveOrAdd.setText("Сохранить");
-                saveOrAdd.setTag("save");
-                break;
-            case "watch":
-                playListName.setText(getIntent().getStringExtra("pl_name"));
-                saveOrAdd.setText("Добавить новый трек");
-                saveOrAdd.setTag("add");
-                playListEditName.setVisibility(View.GONE);
-                playListName.setVisibility(View.VISIBLE);
-            default: break;
+        if (mode.equals("add")) {
+            icon_index = r.nextInt(6);
+            playListName.setVisibility(View.GONE);
+            playListEditName.setVisibility(View.VISIBLE);
+            saveOrAdd.setText("Сохранить");
+            saveOrAdd.setTag("save");
+            cancelOrDelete.setText("Отмена");
+            cancelOrDelete.setTag("cancel");
+        }else{
+            playListName.setText(getIntent().getStringExtra("pl_name"));
+            saveOrAdd.setText("Добавить новый трек");
+            saveOrAdd.setTag("add");
+            cancelOrDelete.setText("Удалить плейлист");
+            cancelOrDelete.setTag("delete");
+            playListEditName.setVisibility(View.GONE);
+            playListName.setVisibility(View.VISIBLE);
         }
         icon.setImageResource(icons[icon_index]);
     }
@@ -124,11 +127,9 @@ public class PlaylistActivity extends AppCompatActivity {
                 values.put("name", playListEditName.getText().toString());
                 values.put("image_id", icon_index);
 
-                database.insert("playlists", null, values);
-
+                idPlaylist = database.insert("playlists", null, values);
             }
         }
-
     }
 
     public void updateMusicTracks(){
@@ -138,5 +139,21 @@ public class PlaylistActivity extends AppCompatActivity {
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.music_track_item, c,
                 playlist_fields, views);
         listView.setAdapter(adapter);
+    }
+
+    public void changeImage(View v){
+        if(mode.equals("add")){
+            Random r = new Random();
+            int l = r.nextInt(6);
+            if(l != icon_index) icon_index = (icon_index + 1) % 6;
+            icon.setImageResource(icons[icon_index]);
+        }
+    }
+
+    public void onClickDeletePlaylist(View v){
+        if(v.getTag().equals("delete")){
+            database.delete("playlists", "_id="+idPlaylist, null);
+        }
+        finish();
     }
 }

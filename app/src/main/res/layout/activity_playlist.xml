@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:layout_weight="2"
+            android:onClick="changeImage"
             android:src="@drawable/playlist1"/>
 
         <LinearLayout
@@ -94,11 +95,13 @@
             android:text="Добавить новый трек"
             android:onClick="onClickAddTrack"/>
         <Button
+            android:id="@+id/cancelOrDelete"
             android:layout_width="0dp"
             android:layout_marginStart="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Удалить плейлист"/>
+            android:text="Удалить плейлист"
+            android:onClick="onClickDeletePlaylist"/>
     </LinearLayout>
 
     <ListView
