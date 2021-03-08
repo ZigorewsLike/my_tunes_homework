@@ -21,6 +21,6 @@
         android:textSize="24sp"
         android:lines="3"
         android:textAlignment="center"
-        android:text="Название"/>
+        android:text=""/>
 
 </LinearLayout>

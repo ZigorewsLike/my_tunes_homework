@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">MyTunes</string>
+    <string name="button_add_new_playlist">Добавить новый плейлист</string>
+    <string name="label_name">Название</string>
+    <string name="button_add_new_track">Добавить новый трек</string>
+    <string name="button_delete_playlist">Удалить плейлист</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_cancel">Отмена</string>
+    <string name="alert_name">Название</string>
+    <string name="alert_hint_name">Новый трек</string>
+    <string name="alert_artist">Артист</string>
+    <string name="alert_hint_artist">Артист</string>
+    <string name="alert_year">Год выпуска</string>
+    <string name="alert_hint_year">2021</string>
+    <string name="alert_duration">Длительность в секундах</string>
+    <string name="alert_hint_duration">250</string>
+    <string name="sort_text">Сортировать:</string>
+    <array name="sort_names">
+        <item>Без сортировки</item>
+        <item>По имени (по возрастанию)</item>
+        <item>По имени (по убыванию)</item>
+    </array>
+    <array name="sort_names_music">
+        <item>Без сортировки</item>
+        <item>По названию (по возрастанию)</item>
+        <item>По названию (по убыванию)</item>
+        <item>По артисту (по возрастанию)</item>
+        <item>По артисту (по убыванию)</item>
+        <item>По длительности (по возрастанию)</item>
+        <item>По длительности (по убыванию)</item>
+    </array>
 </resources>

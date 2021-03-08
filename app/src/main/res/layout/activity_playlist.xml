@@ -33,16 +33,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:layout_marginBottom="5dp"
-                android:text="Название"
+                android:textSize="12sp"
+                android:layout_marginBottom="3dp"
+                android:text="@string/label_name"
                 android:gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/playlistName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_marginBottom="10dp"
                 android:text="Реальное название"
                 android:gravity="center_vertical" />
@@ -61,11 +61,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/labelDuration"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Dur: 00000"/>
                 <TextView
+                    android:id="@+id/labelCount"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -92,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:text="Добавить новый трек"
+            android:text="@string/button_add_new_track"
             android:onClick="onClickAddTrack"/>
         <Button
             android:id="@+id/cancelOrDelete"
@@ -100,8 +102,29 @@
             android:layout_marginStart="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Удалить плейлист"
+            android:text="@string/button_delete_playlist"
             android:onClick="onClickDeletePlaylist"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/sort_text" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/sort_names_music" />
     </LinearLayout>
 
     <ListView

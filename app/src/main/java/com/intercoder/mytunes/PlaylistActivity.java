@@ -1,39 +1,46 @@
 package com.intercoder.mytunes;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class PlaylistActivity extends AppCompatActivity {
-    String mode = "watch";
+    String mode = "watch", stringSort = "";
     ImageView icon;
-    TextView playListName;
+    TextView playListName, musicDuration, musicCount;
     EditText playListEditName;
     ListView listView;
     Button saveOrAdd, cancelOrDelete;
     SQLiteDatabase database;
     int icon_index;
+    Resources res;
     int[] icons = {R.drawable.playlist1, R.drawable.playlist2, R.drawable.playlist3,
             R.drawable.playlist4, R.drawable.playlist5, R.drawable.playlist6};
     long idPlaylist;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +53,10 @@ public class PlaylistActivity extends AppCompatActivity {
         listView = findViewById(R.id.listTracks);
         saveOrAdd = findViewById(R.id.saveOrAdd);
         cancelOrDelete = findViewById(R.id.cancelOrDelete);
+        musicCount = findViewById(R.id.labelCount);
+        musicDuration = findViewById(R.id.labelDuration);
+        spinner = findViewById(R.id.spinner);
+        res = getResources();
 
         idPlaylist = getIntent().getLongExtra("id_playlist", -1);
         DBHelperWithLoader helper = new DBHelperWithLoader(this);
@@ -60,20 +71,38 @@ public class PlaylistActivity extends AppCompatActivity {
             icon_index = r.nextInt(6);
             playListName.setVisibility(View.GONE);
             playListEditName.setVisibility(View.VISIBLE);
-            saveOrAdd.setText("Сохранить");
+            saveOrAdd.setText(res.getString(R.string.button_save));
             saveOrAdd.setTag("save");
-            cancelOrDelete.setText("Отмена");
+            cancelOrDelete.setText(res.getString(R.string.button_cancel));
             cancelOrDelete.setTag("cancel");
         }else{
             playListName.setText(getIntent().getStringExtra("pl_name"));
-            saveOrAdd.setText("Добавить новый трек");
+            saveOrAdd.setText(res.getString(R.string.button_add_new_track));
             saveOrAdd.setTag("add");
-            cancelOrDelete.setText("Удалить плейлист");
+            cancelOrDelete.setText(res.getString(R.string.button_delete_playlist));
             cancelOrDelete.setTag("delete");
             playListEditName.setVisibility(View.GONE);
             playListName.setVisibility(View.VISIBLE);
         }
         icon.setImageResource(icons[icon_index]);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0: stringSort = ""; break;
+                    case 1: stringSort = " ORDER BY title"; break;
+                    case 2: stringSort = " ORDER BY title DESC"; break;
+                    case 3: stringSort = " ORDER BY artist"; break;
+                    case 4: stringSort = " ORDER BY artist DESC"; break;
+                    case 5: stringSort = " ORDER BY duration"; break;
+                    case 6: stringSort = " ORDER BY duration DESC"; break;
+                }
+                updateMusicTracks();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
     }
 
     public void onClickAddTrack(View v){
@@ -119,8 +148,10 @@ public class PlaylistActivity extends AppCompatActivity {
             if(!playListEditName.getText().toString().equals("")){
                 playListEditName.setVisibility(View.GONE);
                 playListName.setText(playListEditName.getText().toString());
-                saveOrAdd.setText("Добавить новый трек");
+                saveOrAdd.setText(res.getString(R.string.button_add_new_track));
                 saveOrAdd.setTag("add");
+                cancelOrDelete.setText(res.getString(R.string.button_delete_playlist));
+                cancelOrDelete.setTag("delete");
                 playListEditName.setVisibility(View.GONE);
                 playListName.setVisibility(View.VISIBLE);
                 ContentValues values = new ContentValues();
@@ -133,12 +164,19 @@ public class PlaylistActivity extends AppCompatActivity {
     }
 
     public void updateMusicTracks(){
-        Cursor c = database.rawQuery("SELECT * FROM music_track WHERE id_playlist == " + idPlaylist, null);
-        String[] playlist_fields = c.getColumnNames();
-        int[] views = { R.id.id, R.id.artist, R.id.title, R.id.year, R.id.duration, R.id.id_plst };
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.music_track_item, c,
-                playlist_fields, views);
+        Cursor c = database.rawQuery("SELECT * FROM music_track WHERE id_playlist == " + idPlaylist + stringSort, null);
+        MusicTrackCursorAdapter adapter = new MusicTrackCursorAdapter(this, c);
         listView.setAdapter(adapter);
+        int duration = 0;
+        int count = 0;
+        if(c.moveToFirst()){
+            do{
+                count++;
+                duration += c.getInt(c.getColumnIndexOrThrow("duration"));
+            }while(c.moveToNext());
+        }
+        musicDuration.setText(String.format("%02d:%02d:%02d", (duration / 3600), ((duration / 60) % 60), (duration % 60)));
+        musicCount.setText((String)(count + " треков"));
     }
 
     public void changeImage(View v){
@@ -155,5 +193,11 @@ public class PlaylistActivity extends AppCompatActivity {
             database.delete("playlists", "_id="+idPlaylist, null);
         }
         finish();
+    }
+
+    public void onClickDeleteMusic(View v){
+        long id_music = (long) v.getTag();
+        database.delete("music_track", "_id="+id_music, null);
+        updateMusicTracks();
     }
 }

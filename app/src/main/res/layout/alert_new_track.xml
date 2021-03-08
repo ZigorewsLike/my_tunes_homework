@@ -11,14 +11,14 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:text="Название" />
+        android:text="@string/alert_name" />
 
     <EditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Новый трек"
+        android:hint="@string/alert_hint_name"
         android:inputType="textPersonName"/>
 
     <TextView
@@ -27,14 +27,14 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:text="Артист" />
+        android:text="@string/alert_artist" />
 
     <EditText
         android:id="@+id/editTextArtist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Артист"
+        android:hint="@string/alert_hint_artist"
         android:inputType="textPersonName"/>
 
     <TextView
@@ -43,14 +43,14 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:text="Год выпуска" />
+        android:text="@string/alert_year" />
 
     <EditText
         android:id="@+id/editTextYear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="2021"
+        android:hint="@string/alert_hint_year"
         android:inputType="date"/>
 
     <TextView
@@ -59,13 +59,13 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:text="Длительность в секундах" />
+        android:text="@string/alert_duration" />
 
     <EditText
         android:id="@+id/editTextDuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="250"
+        android:hint="@string/alert_hint_duration"
         android:inputType="number"/>
 </LinearLayout>

@@ -25,7 +25,7 @@ public class PlayListCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Find fields to populate in inflated template
-        TextView tvBody = (TextView) view.findViewById(R.id.titlePlaylist);
+        TextView tvName = view.findViewById(R.id.titlePlaylist);
         ImageView icon = view.findViewById(R.id.iconPlaylist);
 
         int[] icons = {R.drawable.playlist1, R.drawable.playlist2, R.drawable.playlist3,
@@ -33,7 +33,7 @@ public class PlayListCursorAdapter extends CursorAdapter {
         String title = cursor.getString(cursor.getColumnIndexOrThrow("name"));
         int index = cursor.getInt(cursor.getColumnIndexOrThrow("image_id"));
         long id_plst = cursor.getLong(cursor.getColumnIndex("_id"));
-        tvBody.setText(title);
+        tvName.setText(title);
         icon.setImageResource(icons[index]);
 
         view.setOnClickListener(new View.OnClickListener() {
